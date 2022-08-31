@@ -21,81 +21,67 @@ import {
   Button
 } from 'react-native';
 
-import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import reactScreens from 'react-native-screens';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomePage from './HomePage';
+import NotePage from './NotePage';
 
 const Stack = createNativeStackNavigator();
+
+const getNotes = async () => {
+  const value = await AsyncStorage.getItem('notes');
+  return JSON.parse(value || '[]');
+}
+
+const notes = getNotes();
+
+const setNotes = async () => {
+  await AsyncStorage.setItem('notes', JSON.stringify(notes));
+}
+
+const saveNote = async (text: string) => {
+
+}
 
 const App = () => {
   const scheme = useColorScheme();
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme: DefaultTheme}>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator>
-        <Stack.Screen 
-            name="homePage"
-            component={HomePage}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="note"
-            component={NotePage}
-            options={{title:''}}
-          />
+        <Stack.Screen
+          name="homePage"
+          component={HomePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="note"
+          component={NotePage}
+          options={{ title: '' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-const HomePage =({navigation}: {navigation:any}) => {
-  return (
-    <View style={{flex:1}}>
-
-      <ScrollView>
-        <View style={styles.text}>
-          <TextInput multiline></TextInput>
-        </View>
-      </ScrollView>
-      <View style={styles.buttonStyle}>
-        <Button title="New Note"
-          onPress={() => navigation.navigate('note')}
-        />
-      </View>
-    </View>
-  );
-};
-
-const NotePage = ({navigation}: {navigation:any}) => {
-  return (
-    <View>      
-      <View style={{height: '80%'}}>
-        <View style={styles.textIn}>
-          <TextInput multiline style={{flex: 1}} textAlign = 'left' textAlignVertical='top'></TextInput>
-        </View>
-      </View>
-
-      <View style={styles.buttonStyle}>
-        <Button title="Save Note"/>
-      </View>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
-  textIn:{
+  textIn: {
     borderWidth: 2,
     borderRadius: 20,
     overflow: 'hidden',
     borderColor: "#393e46",
     flex: 1
   },
-  text:{
+  text: {
     borderWidth: 2,
     borderRadius: 20,
+    fontSize: 30,
     overflow: 'hidden',
     borderColor: "#393e46"
   },
-  buttonStyle:{
+  buttonStyle: {
     position: 'absolute',
     right: 0,
     bottom: 0
