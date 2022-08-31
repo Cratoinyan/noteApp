@@ -40,7 +40,7 @@ const App = () => {
           <Stack.Screen
             name="note"
             component={NotePage}
-            options={{headerShown: false}}
+            options={{title:''}}
           />
       </Stack.Navigator>
     </NavigationContainer>
