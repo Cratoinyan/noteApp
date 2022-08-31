@@ -25,8 +25,8 @@ import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import reactScreens from 'react-native-screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import HomePage from './HomePage';
-import NotePage from './NotePage';
+import HomePage from './pages/HomePage';
+import NotePage from './pages/NotePage';
 
 const Stack = createNativeStackNavigator();
 
