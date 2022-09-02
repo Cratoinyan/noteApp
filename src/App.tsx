@@ -16,7 +16,7 @@ import {
 
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { navigationRef } from '../RootNavigation'
+import { navigationRef } from './RootNavigation'
 import HomePage from './pages/HomePage';
 import NotePage from './pages/NotePage';
 
