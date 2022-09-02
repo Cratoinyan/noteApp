@@ -75,7 +75,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             <FlatList
                 data={notes}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={(item: any) => item.id}
             />
             <View style={styles.buttonStyle}>
                 <Button title="New Note"
