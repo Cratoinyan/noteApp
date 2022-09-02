@@ -21,8 +21,8 @@ const getNotes = async () => {
 
 const NotePage = ({ route, navigation }: { navigation: any, route: any }) => {
     const [noteText, setText] = useState('');
-    const [isLoading, setIsLoading] = React.useState(true)
-    const noteInfo = route.params;
+    const [isLoading, setIsLoading] = React.useState(true);
+    let noteInfo = route.params;
 
     console.log(noteInfo);
 
@@ -33,11 +33,19 @@ const NotePage = ({ route, navigation }: { navigation: any, route: any }) => {
     };
 
     const newNote = (textIn: string) => {
+        const tempId = uuid.v4();
+
         const note = {
             text: textIn,
-            id: uuid.v4()
+            id: tempId
         };
         notes.push(note);
+
+        noteInfo = {
+            text: noteText,
+            edit: true,
+            id: tempId
+        }
     };
 
     const deleteNote = async (id: string) => {
