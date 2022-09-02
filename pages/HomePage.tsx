@@ -45,31 +45,43 @@ const getNotes = async () => {
     console.log(noteList);
 }
 
-const Note = ({ text }: any) => {
-    return (
-        <View style={styles.text}>
-            <Text style={{ fontSize: 50 }}>
-                {text}
-            </Text>
-            <Button title='delete' onPress={() => {
-                console.log(noteList)
-            }} />
-        </View>
-    );
-}
 
 //--------------------------------------Functional Component-------------------------------------
 const HomePage = ({ navigation }: { navigation: any }) => {
-    // populateNotes();
     const [isLoading, setIsLoading] = React.useState(true)
     const [notes, setNotes] = React.useState([]);
+    const [onNoteDelete, setOnNoteDelete] = React.useState(0);
+
+    const Note = (props: any) => {
+        console.log(props.id);
+        return (
+            <View style={styles.text}>
+                <Text style={{ fontSize: 50 }}>
+                    {props.text}
+                </Text>
+                <Button title='delete' onPress={() => {
+                    deleteNote(props.id);
+                    setOnNoteDelete(key => key + 1);
+                }} />
+            </View>
+        );
+    }
+
 
     const renderItem = ({ item }: any) => (
-        <Note text={item.text} />
+        <Note text={item.text} id={item.id} />
     );
+
+    const deleteNote = async (id: string) => {
+        const noteIndex = noteList.findIndex((note: any) => note.id == id);
+        noteList.splice(noteIndex, 1);
+        await AsyncStorage.setItem('notes', JSON.stringify(noteList));
+        setNotes(noteList);
+    }
 
     const populateNotes = async () => {
         await getNotes();
+        console.log(noteList);
         setNotes(noteList);
         setIsLoading(false);
     };
@@ -90,6 +102,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             <FlatList
                 data={notes}
                 renderItem={renderItem}
+                keyExtractor={item => item.id}
             />
             <View style={styles.buttonStyle}>
                 <Button title="New Note"
@@ -160,6 +173,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
 
 //--------------------------------------------CLASS VERSION END--------------------------------------
 
+//-----------------------------------------------STYLE SHEET-----------------------------------------
 const styles = StyleSheet.create({
     textIn: {
         borderWidth: 2,
@@ -183,65 +197,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage;
-
-
-//--------------------------------DOC EXAMPLE--------------------------------------------------
-// import React from 'react';
-// import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
-
-// const DATA = [
-//     {
-//         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-//         text: 'First Item',
-//     },
-//     {
-//         id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-//         text: 'Second Item',
-//     },
-//     {
-//         id: '58694a0f-3da1-471f-bd96-145571e29d72',
-//         text: 'Third Item',
-//     },
-// ];
-
-// console.log(DATA);
-
-// const Item = ({ text }: any) => (
-//     <View style={styles.item}>
-//         <Text style={styles.title}>{text}</Text>
-//     </View>
-// );
-
-// const HomePage = () => {
-//     const renderItem = ({ item }: any) => (
-//         <Item text={item.text} />
-//     );
-
-//     return (
-//         <SafeAreaView style={styles.container}>
-//             <FlatList
-//                 data={DATA}
-//                 renderItem={renderItem}
-//                 keyExtractor={item => item.id}
-//             />
-//         </SafeAreaView>
-//     );
-// }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         marginTop: StatusBar.currentHeight || 0,
-//     },
-//     item: {
-//         backgroundColor: '#f9c2ff',
-//         padding: 20,
-//         marginVertical: 8,
-//         marginHorizontal: 16,
-//     },
-//     title: {
-//         fontSize: 32,
-//     },
-// });
-
-// export default HomePage;

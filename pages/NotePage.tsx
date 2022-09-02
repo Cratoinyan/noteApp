@@ -11,6 +11,7 @@ import {
     View,
     Button
 } from 'react-native';
+import uuid from 'react-native-uuid';
 
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -68,11 +69,12 @@ const NotePage = ({ navigation }: { navigation: any }) => {
                 <Button title="Save Note"
                     onPress={() => {
                         const newNote = {
-                            text: noteText
+                            text: noteText,
+                            id: uuid.v4()
                         };
                         console.log(newNote);
                         notes.push(newNote);
-                        // AsyncStorage.setItem('notes', JSON.stringify(notes));
+                        AsyncStorage.setItem('notes', JSON.stringify(notes));
                     }} />
             </View>
         </View>
