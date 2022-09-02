@@ -23,6 +23,7 @@ import {
 
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigationRef } from './RootNavigation'
 import reactScreens from 'react-native-screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from './pages/HomePage';
@@ -48,8 +49,8 @@ const saveNote = async (text: string) => {
 const App = () => {
   const scheme = useColorScheme();
   return (
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
+    <NavigationContainer ref={navigationRef} theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack.Navigator initialRouteName='homePage'>
         <Stack.Screen
           name="homePage"
           component={HomePage}
@@ -58,7 +59,14 @@ const App = () => {
         <Stack.Screen
           name="note"
           component={NotePage}
-          options={{ title: '' }}
+          options={{
+            headerTitle: '',
+            headerRight: () => (
+              <Button title='Delete' onPress={() => {
+                console.log(notes);
+              }} />
+            ),
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
