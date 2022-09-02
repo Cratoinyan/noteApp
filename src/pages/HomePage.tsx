@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Text,
     View,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,15 +29,28 @@ const HomePage = ({ navigation }: { navigation: any }) => {
     const Note = (props: any) => {
         console.log(props.id);
         return (
-            <View style={styles.text}>
+            // <View style={styles.text}>
+            //     <Text style={{ fontSize: 50 }}>
+            //         {props.text}
+            //     </Text>
+            //     <Button title='delete' onPress={() => {
+            //         deleteNote(props.id);
+            //         setOnNoteDelete(key => key + 1);
+            //     }} />
+            // </View>
+            <TouchableOpacity
+                style={styles.text}
+                onPress={() => {
+                    navigation.navigate('note', {
+                        id: props.id,
+                        text: props.text,
+                        edit: true
+                    })
+                }}>
                 <Text style={{ fontSize: 50 }}>
                     {props.text}
                 </Text>
-                <Button title='delete' onPress={() => {
-                    deleteNote(props.id);
-                    setOnNoteDelete(key => key + 1);
-                }} />
-            </View>
+            </TouchableOpacity>
         );
     }
 
@@ -79,7 +93,7 @@ const HomePage = ({ navigation }: { navigation: any }) => {
             />
             <View style={styles.buttonStyle}>
                 <Button title="New Note"
-                    onPress={() => navigation.navigate('note')}
+                    onPress={() => navigation.navigate('note', { edit: false })}
                 />
             </View>
         </View>

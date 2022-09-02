@@ -10,7 +10,7 @@ import {
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let notes: object[] = [];
+let notes: any;
 
 const getNotes = async () => {
     const value = await AsyncStorage.getItem('notes');
@@ -19,10 +19,43 @@ const getNotes = async () => {
 }
 
 
-const NotePage = ({ navigation }: { navigation: any }) => {
+const NotePage = ({ route, navigation }: { navigation: any, route: any }) => {
     const [noteText, setText] = useState('');
     const [isLoading, setIsLoading] = React.useState(true)
+    const noteInfo = route.params;
 
+    console.log(noteInfo);
+
+    const editNote = (text: string) => {
+        const noteIndex = notes.findIndex((note: any) => note.id == noteInfo.id);
+        notes[noteIndex].text = text;
+
+    };
+
+    const newNote = (textIn: string) => {
+        const note = {
+            text: textIn,
+            id: uuid.v4()
+        };
+        notes.push(note);
+    };
+
+    const deleteNote = async (id: string) => {
+        const noteIndex = notes.findIndex((note: any) => note.id == id);
+        notes.splice(noteIndex, 1);
+        await AsyncStorage.setItem('notes', JSON.stringify(notes));
+        await AsyncStorage.setItem('notes', JSON.stringify(notes));
+        navigation.goBack();
+    }
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button title='Delete' onPress={() => { deleteNote(noteInfo.id) }}
+                />
+            )
+        })
+    });
 
 
     const populateNotes = async () => {
@@ -50,19 +83,16 @@ const NotePage = ({ navigation }: { navigation: any }) => {
                         textAlign='left'
                         textAlignVertical='top'
                         numberOfLines={15}
-                        onChangeText={newText => setText(newText)} />
+                        onChangeText={newText => setText(newText)}
+                        defaultValue={noteInfo.text || ''} />
                 </View>
             </View>
 
             <View style={styles.buttonStyle}>
                 <Button title="Save Note"
                     onPress={() => {
-                        const newNote = {
-                            text: noteText,
-                            id: uuid.v4()
-                        };
+                        noteInfo.edit ? editNote(noteText) : newNote(noteText);
                         console.log(newNote);
-                        notes.push(newNote);
                         AsyncStorage.setItem('notes', JSON.stringify(notes));
                     }} />
             </View>

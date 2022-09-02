@@ -38,13 +38,10 @@ const App = () => {
         <Stack.Screen
           name="note"
           component={NotePage}
-          options={{
-            headerTitle: '',
-            headerRight: () => (
-              <Button title='Delete' onPress={() => {
-              }} />
-            ),
-          }}
+          options={({ navigation, route }) => ({
+            headerTitle: ''
+          })}
+          initialParams={{ edit: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
