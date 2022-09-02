@@ -1,21 +1,13 @@
 
 import React, { useState } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
     Text,
     TextInput,
-    useColorScheme,
     View,
     Button
 } from 'react-native';
 import uuid from 'react-native-uuid';
-
-import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import reactScreens from 'react-native-screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let notes: object[] = [];
@@ -23,9 +15,6 @@ let notes: object[] = [];
 const getNotes = async () => {
     const value = await AsyncStorage.getItem('notes');
     notes = JSON.parse(value || '[]');
-    // NoteViews = notes.map((n, i) => {
-    //     return <View key={i} style={styles.text}> <Text> abc</Text> </View>;
-    // });
     console.log(notes);
 }
 
