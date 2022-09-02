@@ -24,6 +24,7 @@ const getNotes = async () => {
 const HomePage = ({ navigation }: { navigation: any }) => {
     const [notes, setNotes] = React.useState([]);
     const [onNoteDelete, setOnNoteDelete] = React.useState(0);
+    const [isLoading, setIsLoading] = React.useState(true);
 
     const Note = (props: any) => {
         return (
@@ -49,16 +50,22 @@ const HomePage = ({ navigation }: { navigation: any }) => {
     );
 
     const populateNotes = async () => {
+        setIsLoading(true);
         await getNotes();
         console.log(noteList);
         setNotes(noteList);
+        setIsLoading(false);
     };
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             populateNotes();
         });
-    });
+    }, []);
+
+    if (isLoading) {
+        return <View><Text>--------loading--------</Text></View>
+    }
 
     return (
         <View style={{ flex: 1 }}>
